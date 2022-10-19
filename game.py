@@ -33,6 +33,8 @@ vel=5
 width, height = 720, 480 
 MAX_BULLET = 3
 bullets=[]
+menu=pygame.image.load(os.path.join('Assets','menu.png'))
+menu=pygame.transform.scale(menu,(width,height))
 background=pygame.image.load(os.path.join('Assets','sky.jpg')) #background image
 background=pygame.transform.scale(background, (width,height))
 gameover=pygame.image.load(os.path.join('Assets','gameover.jpg'))
@@ -177,12 +179,11 @@ def main():
   
   while True :
     fpsClock.tick(fps)
-    MENU_TEXT = get_font(60).render("SAOI GAME", True, "#253B8E")
-    MENU_RECT = MENU_TEXT.get_rect(center=(width/2, 180))
-    screen.blit(MENU_TEXT, MENU_RECT)
+    screen.blit(menu,(0,0))
+
     PLAY_MOUSE_POS=pygame.mouse.get_pos() # get mouse position
-    PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), img_width= 220,img_height=80, pos=(width/2, height/2 + 80), 
-                            text_input="START", font=get_font(30), base_color="#00b7eb", hovering_color="White")
+    PLAY_BUTTON = Button(None, pos=(width/2 -3, height/2 +51), 
+                            text_input="START", font=get_font(33), base_color="#ffdd00", hovering_color="#E6A2C7")
     PLAY_BUTTON.changeColor(PLAY_MOUSE_POS)
     PLAY_BUTTON.update(screen)
     for event in pygame.event.get():
