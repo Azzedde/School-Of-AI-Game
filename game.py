@@ -9,13 +9,16 @@ from matplotlib.pyplot import show
 # Import non-standard modules.
 import pygame
 from pygame.locals import *
+from button import Button
 from enemy_spawner import EnemySpawner
 from random import randrange
 import time
 
+pygame.init() 
 pygame.display.set_caption("Welcome Day") #The window title
 
 #Import images and define sizes
+width, height = 720, 480 
 WIZARD_WIDTH , WIZARD_HEIGHT = 78 , 103
 LIFE_WIDTH , LIFE_HEIGHT = 21 , 22 
 CARA_WIZARD_IMAGE =pygame.image.load(os.path.join('Assets','cara.png')) #character image
@@ -24,6 +27,7 @@ CARA_WIZARD=pygame.transform.scale(CARA_WIZARD_IMAGE,(WIZARD_WIDTH,WIZARD_HEIGHT
 
 BULLET_FIRE=pygame.image.load(os.path.join('Assets','fireball.png'))
 BULLET_FIRE=pygame.transform.scale(BULLET_FIRE, (28,12))
+screen = pygame.display.set_mode((width, height))
 BULLET_VEL= 7
 vel=5
 width, height = 720, 480 
@@ -40,37 +44,29 @@ font = pygame.font.Font(os.path.join('Fonts', 'FreeSansBold.ttf'), 32)
 textX = 10
 textY = 10
 score = 0
+
+
 def show_score(x,y, screen):
   
   score_text = font.render("Score :" + str(score), True, (255, 255, 255))
   screen.blit(score_text,(x,y))
   pygame.display.update()
-def update(dt):
-  """
-  Update game. Called once per frame.
-  dt is the amount of time passed since last frame.
-  If you want to have constant apparent movement no matter your framerate,
-  what you can do is something like
-  
-  x += v * dt
-  
-  and this will scale your velocity based on time. Extend as necessary."""
-  
+
+
+
+def update(wizard):
   # Go through events that are passed to the script by the window.
-  for event in pygame.event.get():
-    # We need to handle these events. Initially the only one you'll want to care
-    # about is the QUIT event, because if you don't handle it, your game will crash
-    # whenever someone tries to exit.
-    if event.type == QUIT:
-      pygame.quit() # Opposite of pygame.init
-      sys.exit() # Not including this line crashes the script on Windows. Possibly
-      # on other operating systems too, but I don't know for sure.
-    # Handle other events as you wish.  
+   for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+          pygame.quit()
+          sys.exit()
+        if event.type ==pygame.KEYDOWN:
+          if event.key == pygame.K_SPACE  and len(bullets)<MAX_BULLET : # event to shot bullets
+            bullet= pygame.Rect(wizard.x + wizard.width , wizard.y + wizard.height//2 , 10 , 5)
+            bullets.append(bullet)
  
 def draw(screen , wizard,bullets, enemy_spawner):
-  """
-  Draw things to the window. Called once per frame.
-  """
+ 
   screen.fill((0, 0, 0)) # Fill the screen with black.
   screen.blit(background,(0,0))
   # Redraw screen here.
@@ -110,13 +106,13 @@ def handle_bullet(bullets, wizard, enemy_spawner):
         pygame.mixer.Sound.play(fireball_sfx)
         bullets.remove(bullet)
 
+def get_font(size): 
+  return pygame.font.Font("Fonts/font.ttf", size)
 
 
 
-
-def runPyGame():
+def play():
   # Initialise PyGame.
-  pygame.init()
   global score
 
   # Set up the clock. This will tick every frame and thus maintain a relatively constant framerate. Hopefully.
@@ -125,16 +121,13 @@ def runPyGame():
   fpsClock = pygame.time.Clock()
   
   # Set up the window.
-  screen = pygame.display.set_mode((width, height))
+
   
   enemy_spawner = EnemySpawner()
 
   #character
   wizard=pygame.Rect(20 ,100, WIZARD_WIDTH , WIZARD_HEIGHT )
   
-  # screen is the surface representing the window.
-  # PyGame surfaces can be thought of as screen sections that you can draw onto.
-  # You can also draw surfaces onto other surfaces, rotate surfaces, and transform surfaces.
   
   # Main game loop.
   dt = 1/fps # dt is the time since last frame.
@@ -151,22 +144,13 @@ def runPyGame():
       enemy_spawner.update()
       
       #handeling some events
-      for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-          pygame.quit()
-          sys.exit()
-        if event.type ==pygame.KEYDOWN:
-          if event.key == pygame.K_SPACE  and len(bullets)<MAX_BULLET : # event to shot bullets
-            bullet= pygame.Rect(wizard.x + wizard.width , wizard.y + wizard.height//2 , 10 , 5)
-            bullets.append(bullet)
+      update(wizard)
         
       for enemy in enemy_spawner.enemy_group:
         if wizard.colliderect(enemy):
           
           game_over = True
-
-      
-      
+     
       keys_pressed = pygame.key.get_pressed()
       show_score(560,40, screen)
       handle_movement(keys_pressed, wizard)
@@ -181,12 +165,35 @@ def runPyGame():
         if event.type == pygame.KEYDOWN:
           if event.key == pygame.K_RETURN:
             score=0
-            runPyGame()
+            play()
       
     
 
-
+def main():
+  
+  fps = 60.0
+  fpsClock = pygame.time.Clock()
+  dt = 1/fps 
+  
+  while True :
+    fpsClock.tick(fps)
+    MENU_TEXT = get_font(60).render("SAOI GAME", True, "#253B8E")
+    MENU_RECT = MENU_TEXT.get_rect(center=(width/2, 180))
+    screen.blit(MENU_TEXT, MENU_RECT)
+    PLAY_MOUSE_POS=pygame.mouse.get_pos() # get mouse position
+    PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), img_width= 220,img_height=80, pos=(width/2, height/2 + 80), 
+                            text_input="START", font=get_font(30), base_color="#00b7eb", hovering_color="White")
+    PLAY_BUTTON.changeColor(PLAY_MOUSE_POS)
+    PLAY_BUTTON.update(screen)
+    for event in pygame.event.get():
+      if event.type == pygame.QUIT:
+        pygame.quit() # Opposite of pygame.init
+        sys.exit() 
+      if event.type == pygame.MOUSEBUTTONDOWN:
+        if PLAY_BUTTON.checkForInput(PLAY_MOUSE_POS):
+          play()
+    pygame.display.update()
  
 
 
-runPyGame()
+main()
