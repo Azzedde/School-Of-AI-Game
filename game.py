@@ -35,7 +35,7 @@ gameover=pygame.image.load(os.path.join('Assets','gameover.jpg'))
 gameover=pygame.transform.scale(gameover, (width, height))
 pygame.font.init()
 pygame.mixer.init()
-fireball_sfx = pygame.mixer.music.load(os.path.join('SFX','fireball.mp3'))
+fireball_sfx = pygame.mixer.Sound(os.path.join('SFX','fireball.mp3'))
 font = pygame.font.Font(os.path.join('Fonts', 'FreeSansBold.ttf'), 32)
 textX = 10
 textY = 10
@@ -103,7 +103,7 @@ def handle_bullet(bullets, wizard, enemy_spawner):
       bullets.remove(bullet)
       global score 
       score += 1
-      print(score)
+
     for enemy in enemy_spawner.enemy_group:
       if bullet.colliderect(enemy):
         enemy.kill()
