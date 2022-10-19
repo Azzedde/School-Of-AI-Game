@@ -101,15 +101,15 @@ def handle_bullet(bullets, wizard, enemy_spawner):
       bullets.remove(bullet)
     elif bullet.x> width :
       bullets.remove(bullet)
-      global score 
-      score += 1
 
+    global score 
     for enemy in enemy_spawner.enemy_group:
       if bullet.colliderect(enemy):
         enemy.kill()
         score += 1
         pygame.mixer.Sound.play(fireball_sfx)
         bullets.remove(bullet)
+
 
 
 
