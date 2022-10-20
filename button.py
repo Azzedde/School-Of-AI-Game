@@ -1,8 +1,6 @@
-import pygame
-from pygame.locals import *
 class Button():
-	def __init__(self, image,  img_width,img_height,pos, text_input, font, base_color, hovering_color):
-		self.image = pygame.transform.scale(image,(img_width,img_height))
+	def __init__(self, image,pos, text_input, font, base_color, hovering_color):
+		self.image = image
         
 		self.x_pos = pos[0]
 		self.y_pos = pos[1]
