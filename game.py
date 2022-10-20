@@ -46,7 +46,7 @@ font = pygame.font.Font(os.path.join('Fonts', 'FreeSansBold.ttf'), 32)
 textX = 10
 textY = 10
 score = 0
-
+lounge = pygame.mixer.music.load(os.path.join('SFX','lounge.mp3'))
 
 def show_score(x,y, screen):
   
@@ -176,6 +176,9 @@ def main():
   fps = 60.0
   fpsClock = pygame.time.Clock()
   dt = 1/fps 
+  pygame.mixer.music.set_volume(0.1)
+  pygame.mixer.music.play()
+  
   
   while True :
     fpsClock.tick(fps)
