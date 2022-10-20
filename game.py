@@ -50,9 +50,9 @@ lounge = pygame.mixer.music.load(os.path.join('SFX','lounge.mp3'))
 
 def show_score(x,y, screen):
   
-  score_text = font.render("Score :" + str(score), True, (255, 255, 255))
+  score_text = font.render("Score: " + str(score), True, (255, 255, 255))
   screen.blit(score_text,(x,y))
-  pygame.display.update()
+  pygame.display.flip()
 
 
 
