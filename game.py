@@ -106,7 +106,9 @@ def handle_bullet(bullets, wizard, enemy_spawner):
         enemy.kill()
         score += 1
         pygame.mixer.Sound.play(fireball_sfx)
-        bullets.remove(bullet)
+        if bullet in bullets:
+
+          bullets.remove(bullet)
 
 def get_font(size): 
   return pygame.font.Font("Fonts/font.ttf", size)
