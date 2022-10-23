@@ -179,7 +179,7 @@ def main():
   fpsClock = pygame.time.Clock()
   dt = 1/fps 
   pygame.mixer.music.set_volume(0.1)
-  pygame.mixer.music.play()
+  pygame.mixer.music.play(-1)
   
   
   while True :
